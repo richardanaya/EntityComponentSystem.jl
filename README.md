@@ -1,10 +1,13 @@
 # ECS.jl
 
+An entity component system written for Julia meant for video games and other simulations
+
 ```julia
 add "https://github.com/richardanaya/ECS.jl"
 ```
+Documentation is [here](https://richardanaya.github.io/ECS.jl/build/index.html)
 
-An entity component system written for Julia
+## Simple Example
 
 ```julia
 using ECS
