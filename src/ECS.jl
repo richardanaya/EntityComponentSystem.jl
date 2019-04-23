@@ -89,6 +89,14 @@ function removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: E
     nothing
 end
 
+function getcomponent(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
+    if getentity(world,entity) == nothing
+        println("tried to remove component to non existant entity")
+        return
+    end
+    world.components[C][entity.index]
+end
+
 function runsystem!(f,world::World,types::Array{DataType,1})
     num_types = length(types)
     for e = 1:world.max_entity
@@ -112,5 +120,5 @@ function runsystem!(f,world::World,types::Array{DataType,1})
 end
 
 export ECSComponent,World,EntityKey,getentity,createentity!,register!,destroyentity!,
-runsystem!,addcomponent!,removecomponent!
+runsystem!,addcomponent!,removecomponent!,getcomponent
 end
