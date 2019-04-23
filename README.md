@@ -1,5 +1,9 @@
 # ECS.jl
 
+```julia
+add "https://github.com/richardanaya/ECS.jl"
+```
+
 An entity component system written for Julia
 
 ```julia
