@@ -1,6 +1,6 @@
 module ECS
 
-abstract type Component end
+abstract type ECSComponent end
 mutable struct World
     entity_generation::Array{Union{Int64,Nothing}}
     max_entity::Int64
@@ -25,7 +25,7 @@ function getentity(world::World,key::EntityKey)
     key.index
 end
 
-function register!(world::World,::Type{C}) where C <: Component
+function register!(world::World,::Type{C}) where C <: ECSComponent
     world.components[C] = Array{Union{C,Nothing}}(undef,1000)
     nothing
 end
@@ -71,7 +71,7 @@ function createentity!(world::World)
     EntityKey(i,current_generation)
 end
 
-function addcomponent!(world::World,entity::EntityKey,component::C) where C <: Component
+function addcomponent!(world::World,entity::EntityKey,component::C) where C <: ECSComponent
     if getentity(world,entity) == nothing
         println("tried to add component to non existant entity")
         return
@@ -80,7 +80,7 @@ function addcomponent!(world::World,entity::EntityKey,component::C) where C <: C
     nothing
 end
 
-function removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: Component
+function removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
     if getentity(world,entity) == nothing
         println("tried to remove component to non existant entity")
         return
@@ -111,4 +111,6 @@ function runsystem!(f,world::World,types::Array{DataType,1})
     nothing
 end
 
+export ECSComponent,World,EntityKey,getentity,createentity!,register!,destroyentity!,
+runsystem!,addcomponent!,removecomponent!
 end
