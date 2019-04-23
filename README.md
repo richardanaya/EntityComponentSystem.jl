@@ -3,7 +3,7 @@
 An entity component system written for Julia for video games and other simulations
 
 ```julia
-add "https://github.com/richardanaya/ECS.jl"
+add "ECS"
 ```
 Documentation is [here](https://richardanaya.github.io/ECS.jl/build/index.html)
 
