@@ -34,12 +34,22 @@ player = createentity!(world)
 addcomponent!(world,player,Position(0,0))
 addcomponent!(world,player,Velocity(1,2))
 
-# Run systems on entities with specific sets of components
-runsystem!(world,[Position,Velocity]) do entity,components
-    # Components are given in order they are requested
-    pos,vel = components
-    # Modify components
-    pos.x += vel.x
-    pos.y += vel.y
+FPS = 60.0
+
+function runphysics!()
+  while true
+    global world
+    # Run systems on entities with specific sets of components
+    runsystem!(world,[Position,Velocity]) do entity,components
+        # Components are given in order they are requested
+        pos,vel = components
+        # Modify components
+        pos.x += vel.x
+        pos.y += vel.y
+    end
+    sleep(1.0/FPS)
+  end
 end
+
+@async runphysics!()
 ```
