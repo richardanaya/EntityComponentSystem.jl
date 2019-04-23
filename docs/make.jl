@@ -1,5 +1,5 @@
 push!(LOAD_PATH,"../src/")
-using Documenter,ECS
+using Documenter,EntityComponentSystem
 makedocs(
-modules = [ECS],
-sitename="ECS.js")
+modules = [EntityComponentSystem],
+sitename="EntityComponentSystem.js")

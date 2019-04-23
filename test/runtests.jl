@@ -1,4 +1,4 @@
-using ECS
+using EntityComponentSystem
 using Test
 
 @testset "Basic tests" begin

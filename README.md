@@ -1,16 +1,16 @@
-# ECS.jl 🍱
+# EntityComponentSystem.jl 🍱
 
 An entity component system written for Julia for video games and other simulations.
 
 ```julia
-add "ECS"
+add "EntityComponentSystem"
 ```
-Documentation is [here](https://richardanaya.github.io/ECS.jl/build/index.html)
+Documentation is [here](https://richardanaya.github.io/EntityComponentSystem.jl/build/index.html)
 
 ## Simple Example
 
 ```julia
-using ECS
+using EntityComponentSystem
 
 mutable struct Position <: ECSComponent
   x::Float32

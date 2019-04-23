@@ -1,4 +1,4 @@
-name = "ECS"
+name = "EntityComponentSystem"
 uuid = "a8343a65-b356-5275-be17-d741438d126c"
 authors = ["Richard Anaya <richard.anaya@gmail.com>"]
 version = "0.0.1"
