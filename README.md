@@ -1,4 +1,4 @@
-# ECS.jl
+# ECS.jl 🍱
 
 An entity component system written for Julia meant for video games and other simulations
 
