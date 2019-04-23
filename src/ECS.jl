@@ -2,7 +2,7 @@ module ECS
 
 """
     ECSComponent
-    
+
 A representation of an entity component system component.
 """
 abstract type ECSComponent end
@@ -19,11 +19,21 @@ mutable struct World
     components::Dict{DataType,Any}
 end
 
+"""
+    EntityKey
+
+A generational index to an entity that will fail in usage if the entity has been destroyed.
+"""
 struct EntityKey
     index::Int64
     generation::Int64
 end
 
+"""
+    World()
+
+Returns a new World instance with defaults.
+"""
 function World()
     World(Array{Union{Int64,Nothing}}(undef,100),0,[],Dict())
 end
@@ -31,7 +41,7 @@ end
 """
     getentity(world::World,key::EntityKey)
 
-Returns double the number `x` plus `1`.
+Returns entity index if entity key is still valid.
 """
 function getentity(world::World,key::EntityKey)
     current_generation = world.entity_generation[key.index]
@@ -41,11 +51,21 @@ function getentity(world::World,key::EntityKey)
     key.index
 end
 
+"""
+    register!(world::World,::Type{C}) where C <: ECSComponent
+
+Registers storage space for a component type.
+"""
 function register!(world::World,::Type{C}) where C <: ECSComponent
     world.components[C] = Array{Union{C,Nothing}}(undef,1000)
     nothing
 end
 
+"""
+    destroyentity!(world::World,entity::EntityKey)
+
+Deallocates entity and memory if entity key is valid.
+"""
 function destroyentity!(world::World,entity::EntityKey)
     if getentity(world,entity) == nothing
         println("tried to destroy non existant entity")
@@ -60,6 +80,11 @@ function destroyentity!(world::World,entity::EntityKey)
     nothing
 end
 
+"""
+    createentity!(world::World)
+
+Allocates an entity and returns an entity key.
+"""
 function createentity!(world::World)
     i = if length(world.free_entities) > 0
         # If there's a free entity, use it
@@ -87,6 +112,11 @@ function createentity!(world::World)
     EntityKey(i,current_generation)
 end
 
+"""
+    addcomponent!(world::World,entity::EntityKey,component::C) where C <: ECSComponent
+
+Associate a component with an entity key.
+"""
 function addcomponent!(world::World,entity::EntityKey,component::C) where C <: ECSComponent
     if getentity(world,entity) == nothing
         println("tried to add component to non existant entity")
@@ -96,6 +126,11 @@ function addcomponent!(world::World,entity::EntityKey,component::C) where C <: E
     nothing
 end
 
+"""
+    removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
+
+Dissociate a component of a specific type with an entity key.
+"""
 function removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
     if getentity(world,entity) == nothing
         println("tried to remove component to non existant entity")
@@ -105,6 +140,11 @@ function removecomponent!(world::World,entity::EntityKey,::Type{C}) where C <: E
     nothing
 end
 
+"""
+    getcomponent(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
+
+Get a component of a specific type of an entity key.
+"""
 function getcomponent(world::World,entity::EntityKey,::Type{C}) where C <: ECSComponent
     if getentity(world,entity) == nothing
         println("tried to remove component to non existant entity")
@@ -113,6 +153,11 @@ function getcomponent(world::World,entity::EntityKey,::Type{C}) where C <: ECSCo
     world.components[C][entity.index]
 end
 
+"""
+    runsystem!(f,world::World,types::Array{DataType,1})
+
+For each entity with components of passed in types, call provided function with that entity and components.
+"""
 function runsystem!(f,world::World,types::Array{DataType,1})
     num_types = length(types)
     for e = 1:world.max_entity
