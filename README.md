@@ -3,7 +3,9 @@
 ```julia
 add "https://github.com/richardanaya/ECS.jl"
 ```
-Documentation is [here](https://richardanaya.github.io/ECS.jl/build/index.html)
+*Documentation* is [here](https://richardanaya.github.io/ECS.jl/build/index.html)
+
+## Simple Example
 
 An entity component system written for Julia
 
