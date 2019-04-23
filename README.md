@@ -1,6 +1,6 @@
 # ECS.jl 🍱
 
-An entity component system written for Julia meant for video games and other simulations
+An entity component system written for Julia for video games and other simulations
 
 ```julia
 add "https://github.com/richardanaya/ECS.jl"
