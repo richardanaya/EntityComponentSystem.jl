@@ -1,6 +1,17 @@
 module ECS
 
+"""
+    ECSComponent
+    
+A representation of an entity component system component.
+"""
 abstract type ECSComponent end
+
+"""
+    World
+
+A collection of entities and their components.
+"""
 mutable struct World
     entity_generation::Array{Union{Int64,Nothing}}
     max_entity::Int64
@@ -17,6 +28,11 @@ function World()
     World(Array{Union{Int64,Nothing}}(undef,100),0,[],Dict())
 end
 
+"""
+    getentity(world::World,key::EntityKey)
+
+Returns double the number `x` plus `1`.
+"""
 function getentity(world::World,key::EntityKey)
     current_generation = world.entity_generation[key.index]
     if current_generation == nothing || current_generation != key.generation
