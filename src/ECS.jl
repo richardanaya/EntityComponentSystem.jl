@@ -45,7 +45,14 @@ function destroyentity!(world::World,entity::EntityKey)
 end
 
 function createentity!(world::World)
-    i = world.max_entity += 1
+    i = if length(world.free_entities) > 0
+        # If there's a free entity, use it
+        pop!(world.free_entities)
+    else
+        # Otherwise add a new one
+        world.max_entity += 1
+    end
+
     current_generation = world.entity_generation[i]
     if current_generation == nothing
         current_generation = 1
