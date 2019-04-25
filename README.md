@@ -3,7 +3,7 @@
 An entity component system written for Julia for video games and other simulations.
 
 ```julia
-add "EntityComponentSystem"
+pkg> add EntityComponentSystem
 ```
 Documentation is [here](https://richardanaya.github.io/EntityComponentSystem.jl/build/index.html)
 
