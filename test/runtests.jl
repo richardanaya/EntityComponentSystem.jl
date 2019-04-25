@@ -23,7 +23,7 @@ using Test
     player = createentity!(world)
     @test player != nothing
     @test world.max_entity == 1
-    @test world.entity_generation[1] == 1
+    @test world.entity_keys[1].generation == 1
     e = getentity(world,player)
     @test e == 1
     destroyentity!(world,player)
@@ -32,11 +32,11 @@ using Test
     player = createentity!(world)
     @test player != nothing
     @test world.max_entity == 1
-    @test world.entity_generation[1] == 3
+    @test world.entity_keys[1].generation == 3
     player = createentity!(world)
     @test player != nothing
     @test world.max_entity == 2
-    @test world.entity_generation[2] == 1
+    @test world.entity_keys[2].generation == 1
 
     addcomponent!(world,player,Position(4.0,4.0))
     @test world.components[Position][2] != nothing

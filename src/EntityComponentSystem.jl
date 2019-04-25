@@ -8,25 +8,25 @@ A representation of an entity component system component.
 abstract type ECSComponent end
 
 """
+    EntityKey
+
+A generational index to an entity that will fail in usage if the entity has been destroyed.
+"""
+mutable struct EntityKey
+    index::Int64
+    generation::Int64
+end
+
+"""
     World
 
 A collection of entities and their components.
 """
 mutable struct World
-    entity_generation::Array{Union{Int64,Nothing}}
+    entity_keys::Array{Union{EntityKey,Nothing}}
     max_entity::Int64
     free_entities::Array{Int64,1}
     components::Dict{DataType,Any}
-end
-
-"""
-    EntityKey
-
-A generational index to an entity that will fail in usage if the entity has been destroyed.
-"""
-struct EntityKey
-    index::Int64
-    generation::Int64
 end
 
 """
@@ -44,8 +44,8 @@ end
 Returns entity index if entity key is still valid.
 """
 function getentity(world::World,key::EntityKey)
-    current_generation = world.entity_generation[key.index]
-    if current_generation == nothing || current_generation != key.generation
+    entity = world.entity_keys[key.index]
+    if entity == nothing || entity.generation != key.generation
         return nothing
     end
     key.index
@@ -76,7 +76,7 @@ function destroyentity!(world::World,entity::EntityKey)
     end
     push!(world.free_entities,entity.index)
     # makes sure entity cant be retrieved again
-    world.entity_generation[entity.index] += 1
+    world.entity_keys[entity.index] = EntityKey(entity.index,world.entity_keys[entity.index].generation + 1)
     nothing
 end
 
@@ -93,14 +93,15 @@ function createentity!(world::World)
         # Otherwise add a new one
         world.max_entity += 1
     end
-
-    current_generation = world.entity_generation[i]
-    if current_generation == nothing
-        current_generation = 1
+    
+    entity_key = world.entity_keys[i]
+    if entity_key == nothing 
+        entity_key = EntityKey(i,1)
+        world.entity_keys[i] = entity_key
     else
-        current_generation += 1
+        world.entity_keys[i] = EntityKey(i,world.entity_keys[i].generation + 1)
     end
-    world.entity_generation[i] = current_generation
+    
     # clear out components for the new entity
     for x in keys(world.components)
         componentList = world.components[x]
@@ -109,7 +110,7 @@ function createentity!(world::World)
         end
         componentList[i] = nothing
     end
-    EntityKey(i,current_generation)
+    entity_key
 end
 
 """
@@ -174,7 +175,7 @@ function runsystem!(f,world::World,types::Array{DataType,1})
         end
         # if entity has all components call function
         if length(components) == num_types
-            f(EntityKey(e,world.entity_generation[e]),components)
+            f(world.entity_keys[e],components)
         end
     end
     nothing
